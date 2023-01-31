@@ -1,0 +1,179 @@
+---
+geometry: "top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm"
+mainfont: Times New Roman
+fontsize: 11pt
+output:
+    pdf_document:
+        extra_dependencies: ["pdfpages"]
+        keep_tex: yes
+        toc: true
+        toc_float: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+- \usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+- \usepackage{mathtools}
+- \usepackage{lastpage}
+- \usepackage{enumerate}
+- \usepackage{fancyhdr}
+- \usepackage{mathrsfs}
+- \usepackage{xcolor}
+- \usepackage{graphicx}
+- \usepackage{listings}
+- \usepackage{hyperref}
+- \usepackage{titling}
+- \pretitle{\begin{flushleft}}
+- \posttitle{\end{flushleft}} 
+- \preauthor{\begin{flushleft}}
+- \postauthor{\end{flushleft}} 
+- \predate{\begin{flushleft}}
+- \postdate{\end{flushleft}} 
+---
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+\renewcommand\lstlistingname{Python}
+\renewcommand\lstlistlistingname{Python}
+\def\lstlistingautorefname{Python}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines,
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\newcommand\course{CSE 3400}
+\newcommand\hwnumber{1}
+\newcommand\NetIDa{NetID: 2995060}
+\newcommand\Name{Pham Hoang Long Do}
+\newcommand\Prof{Ghada Almashaqbeh}
+
+\newcommand*\concat{\mathbin{\|}}
+\newcommand\xor{\oplus}
+
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\Name\\\NetIDa}
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \Prof}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+# Problem 1
+
+## Part a
+\lstset{caption={XORing with 8003}}
+\lstset{label={}}
+\begin{lstlisting}[style = Python]
+    import time
+
+    def main():
+        L = [2**(10),2**(20),2**(30)]
+        for i in L:
+            start = time.time()
+            for counter in range(0,i+1,1):
+                xor = counter ^ 8003
+            end = time.time()
+        print(end-start)
+  \end{lstlisting}
+
+
+```
+CPU: I7-1165G7 (4 cores - 8 threads - 2.8GHz Clock Speed)
+RAM: 16GB
+Language: Python
+```
+Use the for the CPU time formula:
+$$
+\text{CPU time} = \text{Intructions count} \times CPI \times \text{Clock Cycle}
+$$
+Since we use the same code for every counter $2^{10},2^{20},2^{30},2^{330}$ so the CPI will be the same. Lets consider the two cases $2^{30}$ and $2^{330}$ which is $\text{CPU Time}_{A}$ and $\text{CPU Time}_{B}$ respectively. There is only one intruction (XORing) in the body of the code. Therefore, the total instructions count for $\text{CPU Time}_{A}$ is $2^{30}$ instructions and for $\text{CPU Time}_{B}$ is $2^{330}$ instructions. Clock cycle will always be the same. In addition, this algorithm has the 0(n) run time.
+$$
+\begin{split}
+38.3 & = 2^{30} \times CPI \times \text{Clock Cyle} \\
+\text{CPU Time}_{B} & = 2^{330} \times CPI \times \text{Clock Cyle}
+\end{split}
+$$
+Divide both equations, we have:
+$$
+\frac{38.3}{\text{CPU Time}_{B}} = \frac{2^{30}}{2^{330}}
+$$
+Therefore
+$$
+\text{CPU Time}_{B} = \frac{2^{330}\times38.3}{2^{30}} = 7.8 \times 10^{91} seconds = 2.47\times10^{84} years
+$$
+\newpage
+
+## Part b
+\lstset{caption={Dividing with 4009}}
+\lstset{label={}}
+\begin{lstlisting}[style = Python]
+    import time
+
+    def main():
+        L = [2**(10),2**(20),2**(30)]
+        for i in L:
+            start = time.time()
+            for counter in range(0,i+1,1):
+                xor = counter / 4009
+            end = time.time()
+            print(end-start)
+  \end{lstlisting}
+  Use the same logic that we used to solve part a since this question, we have:
+ $$
+\frac{31.3\times2^{330}}{2^{30}}= 6.374\times10^{91}\hspace{0.2cm}\text{seconds} = 2.02\times10^{84} years
+ $$
+
+![Result when XORing and Dividing](/home/yuri/Gits/CSE3400/Homework1/test_result.png)
+
+
+# Problem 2
+
+\begin{enumerate}
+\item $G_2(s \concat t \concat z)= G_1(s) \concat (t \xor z)$ 
+\newline
+$G_{2}$ is not a secure PRG for the following reasons:
+\begin{enumerate}
+ \item $G_{1}(s)$ is a secure PRG
+ \item $t \xor z$ is not random since z is random but t is not necessarly random; therefore, half of the string could be not necessarly random.
+\end{enumerate}
+Therefore, the attacker could ignore the $G_{1}(s)$ and go after the $t \xor z$ part. Hence, $G_{2}(s)$ is \textbf{\textit{Not A Secure PRG}}
+
+\item $G_3(s)= G_0(\bar{s}) \oplus 1^{2n}$
+
+\begin{enumerate}
+ \item $G_{0}(\bar{s})$ is a secure PRG since $G_{0}(s)$ is the PRG and $\bar{s}$ will not change the distribution of ${0,1}$
+ \item $1^{2n} = 1^{n}$ which is a string of $1$ that has length $n$. This is a fixed pattern.
+\end{enumerate}
+We basically flip the bit of $G_{0}(\bar{s})$. In orther words, $G_3(s) = \texttildelow G_{0}(\bar{s})$. We use arguement from 1 to say that $G_{0}(\bar{s})$ is a secure PRG. Therefore, $G_{3}(s)$ is a \textbf{\textit{Secure PRG}}
+\item $G_4(s \concat z) =  ((s \concat z) \oplus G_0(s)) \concat G_0(s)$
+
+\begin{enumerate}
+ \item $G_{0}(s)$ is a secure PRG
+ \item $s \xor z$ will produce another random string since both s and z are random.
+ \item $((s \concat z) \oplus G_0(s))$ is a secure PRG due to the above properties.
+ \item $((s \concat z) \oplus G_0(s)) \concat G_0(s)$ is a secure PRG since we concatenate property c with property a. 
+\end{enumerate}
+Therefore, $G_{4}(s)$ is \textbf{\textit{A Secure PRG}}.
+\item $G_5(s) = \mathsf{msb}(G_0(s)) \concat G_0(s) \concat G_1(z)$, where $\mathsf{msb}$ is the most significant bit.
+\begin{enumerate}
+ \item $G_{0}(s)$ and $G_{1}(s)$ are a secure PRG
+ \item The attacker knows the algorithm that constructed $G_{0}$ but he doesn't know the seed. However, he still has a non-negligible chance of guessing $msb(G_{0}(s)$ which in this case is $50\%$
+\end{enumerate}
+Basically, the problem becomes, $$\text{50\% \{0,1\}} \concat \text{PRG} \concat \text{PRG}$$
+$G_{5}(s)$ is \textbf{\textit{A Secure PRG}} since he only has 50\% change of guessing the correct MSB of $G_{5}(s)$, and the rest of $G_{5}(s)$ are still random.
+\end{enumerate} 
+
+# Problem 3
