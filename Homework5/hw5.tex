@@ -1,0 +1,125 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, CSE Dept.}
+
+\noindent
+{\bf Spring 2023}
+
+\noindent
+{\bf CSE 3400/CSE 5080: Introduction to Computer and Network Security \\(or Introduction to Cybersecurity)}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Assignment 5}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: 4/6/2023}
+
+\noindent
+{Submission deadline: 4/14/2023, 11:59 pm} \\\\
+
+\noindent{\bf Notes:} 
+\begin{itemize}
+\item Solutions {\bf must be typed} (using latex or any other text editor) and must be submitted as a pdf (not word or source latex files).
+
+\item This homework will have a \textbf{shorter late days allowance} than usual. It will be only \textbf{3 days}, after which no late submissions will be accepted.
+\end{itemize}
+
+
+\noindent{\bf Problem 1 [30 points]\\}
+For the 2PP protocol found in slide 21, lecture 8, answer the following questions:
+\begin{enumerate}
+    \item Eve, who is listening to the communication between Alice and Bob, saw the three exchanged messages in a previous execution. Eve is trying to spoof Alice as follows: she will send the same nonce that Alice sent before to Bob, and she argues that she can reuse the previous message Alice sent as a response to Bob (the third message $Mac_k(3 \concat A \rightarrow B \concat N_A \concat N_B)$) and will be able to authenticate with Bob. Is that true? why?
+    
+    \item We modify the protocol to replace the MAC with a PRG as follows: both Alice and Bob will generate a pad $y = PRG(k)$ using the shared key, and then instead of the MAC output as in the figure (the second and third message) each of them will send the MAC input (the one you see in the figure) XORed with $y$. Will this modified protocol be as secure as the original one? why?
+    
+    \item Will this protocol remain secure if Bob's nonce is $N_B = N_A +1$, while Alice's nonce is a fresh random value (in particular, will it remain secure against spoofing)? why? 
+\end{enumerate}
+
+
+\noindent{\bf Note:} if the scheme is insecure then provide a successful attack against it. If the scheme is secure, just provide a convincing argument (formal security proofs are not required).\\
+
+
+\noindent{\bf Problem 2 [35 points]}
+\begin{enumerate}
+    \item Modify the 2PP key exchange protocol in slide 11, lecture 9, to make it time-based instead of nonce-based; that is, the parties will compute the session key using the time stamp Alice sends, i.e., $k_i^S = PRF_{k^M}(T_A \concat T_B)$, where $T_A$ and $T_B$ are the time stamps of Alice and Bob, respectively. Show any additional checks that the parties must perform or any additional state they must keep to ensure that the new time-based protocol preserves the same correctness and security level obtained by the original protocol.
+    
+    \item For the 2RT-2PP protocol in slide 10, lecture 9, Richard wants to modify the protocol to have the full input of the MAC encrypted rather than encrypting only the request or the response in that input. Will that impact the security of the protocol (as compared to the original protocol)? why? 
+    
+    \item If the home network in the GSM protocol gets compromised (controlled by an attacker), will this attacker be able to spoof as Mobile Client and fool a visited network? why? and if the answer is yes, how? 
+\end{enumerate}
+
+
+\noindent{\bf Note:} if the scheme is insecure then provide a successful attack against it. If the scheme is secure, just provide a convincing argument (formal security proofs are not required). \\
+
+\noindent{\bf Problem 3 [35 points]\\}
+Compute the following expressions (please read the note below carefully):
+\begin{enumerate}
+    \item $185 \cdot 11^{150} + 1230 \cdot 1024^{33} \mod 41$
+    
+    \item $645(19850^{874000} + 653 \cdot 123456^{9856}) \mod 29$
+    
+    \item $\frac{513}{12} + \frac{704}{11} + 20450 \mod 103$
+    
+    \item $248 - \frac{45}{123456} + \frac{1785}{32 \cdot 2} \mod 86$
+    
+    \item $245 \cdot (17 + (421 \cdot 8^{109} (32^{590} + 7996))) \mod 59$
+    
+    \item $\phi(43) + \phi(1680)$ (First represent each of 43 and 1680 as a product of powers of distinct primes and then compute the Euler's function.)
+    
+    \item Is the following congruence true? why? \\
+    $13 \cdot 4 \equiv 93 \cdot 6 \quad (\mod 19)$
+\end{enumerate}
+
+
+\noindent{\\\bf Note:} The goal of this problem is to use the simplification techniques we studied in class. Computing the whole expression (as one shot) using a calculator or some software without showing the simplification steps will be considered a wrong answer. Also, whenever applicable indicate the theorem/lemma/property that allowed the simplification step that you applied. \\
+% ***********************************************************************************************
+
+
+\end{document} 

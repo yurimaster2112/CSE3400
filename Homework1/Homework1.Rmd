@@ -173,7 +173,24 @@ Therefore, $G_{4}(s)$ is \textbf{\textit{A Secure PRG}}.
  \item The attacker knows the algorithm that constructed $G_{0}$ but he doesn't know the seed. However, he still has a non-negligible chance of guessing $msb(G_{0}(s)$ which in this case is $50\%$
 \end{enumerate}
 Basically, the problem becomes, $$\text{50\% \{0,1\}} \concat \text{PRG} \concat \text{PRG}$$
-$G_{5}(s)$ is \textbf{\textit{A Secure PRG}} since he only has 50\% change of guessing the correct MSB of $G_{5}(s)$, and the rest of $G_{5}(s)$ are still random.
+$G_{5}(s)$ is \textbf{\textit{A Secure PRG}} since he only has 50\% change of guessing the correct MSB of $G_{5}(s)$, and the rest of $G_{5}(s)$ are still psuedo random.
 \end{enumerate} 
 
 # Problem 3
+
+## Part 1
+\begin{enumerate}
+\item In monoalphabetic substitution cipher, each letter is mapped with another letter to form the ciphertext. We have 26 letters in the alphabet. Therefore, the CPA attacker need to send 26 distinct letter to the oracle to obtain its correspond ciphertext.
+\item No my answer won't change if we have a CCA attacker. Since each cipher text is mapped uniquely with a plaintext letter. Therefore, the attacker has to pick 26 distinct ciphertext letter and send them to the oracle to obtain the correspond plaintext.
+\item Yes. The letter frequency attack will help since we can use the one-on-one fact that used in monoalphabetic substitution. Each plaintext letter is mapped uniquely with a ciphertext, so we can analyze the distribution of ciphertext letters and find the key.
+\end{enumerate}
+
+\newpage
+## Part 2
+
+\begin{enumerate}
+\item Since Alice and Sponge only exchange 100 messages, and the pad for those 100 messages are different. Therefore, it's \textbf{Secure} for Alice to do so since an attacker can't guess the key or any insight about Alice messages by Xoring two messages together.
+\item No it's \textbf{not secure} to do so since each of message has length of 1 which mean the key also has the length of 1 in order for them to XOR. If a key has length of 1 bit, the key space is extremely small in this case it only has two choices {0,1}; therefore, an attacker could have a non-negligible chance to guess the key which is 50\%.
+\end{enumerate}
+
+

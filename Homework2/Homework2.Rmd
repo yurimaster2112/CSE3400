@@ -1,0 +1,139 @@
+---
+geometry: "top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm"
+mainfont: Times New Roman
+fontsize: 11pt
+output:
+    pdf_document:
+        extra_dependencies: ["pdfpages"]
+        keep_tex: yes
+        toc: true
+        toc_float: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+- \usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+- \usepackage{mathtools}
+- \usepackage{lastpage}
+- \usepackage{enumerate}
+- \usepackage{fancyhdr}
+- \usepackage{mathrsfs}
+- \usepackage{xcolor}
+- \usepackage{graphicx}
+- \usepackage{listings}
+- \usepackage{hyperref}
+- \usepackage{titling}
+- \pretitle{\begin{flushleft}}
+- \posttitle{\end{flushleft}} 
+- \preauthor{\begin{flushleft}}
+- \postauthor{\end{flushleft}} 
+- \predate{\begin{flushleft}}
+- \postdate{\end{flushleft}} 
+---
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+\renewcommand\lstlistingname{Python}
+\renewcommand\lstlistlistingname{Python}
+\def\lstlistingautorefname{Python}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines,
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\newcommand\course{CSE 3400}
+\newcommand\hwnumber{2}
+\newcommand\NetIDa{NetID: 2995060}
+\newcommand\Name{Pham Hoang Long Do}
+\newcommand\Prof{Ghada Almashaqbeh}
+
+\newcommand*\concat{\mathbin{\|}}
+\newcommand\xor{\oplus}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\Name\\\NetIDa}
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \Prof}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+# Problem 1
+
+Let $F:\zo^n \times \zo^n \to \zo^n$ be a PRF, state whether the following constructions are PRFs (in all parts $k$ is a long random secret key).
+
+\begin{enumerate}
+\item $F'_k(x) = (x \oplus k) \concat F_k(x) \concat F_k(x + 1)$, where each of $k$ and $x$ is of length $n$ bits. \\
+This encryption scheme has the following properties:
+\begin{enumerate}
+\item The second part ($F_k(x)$) is a secure PRF since key is private and a long random string.
+\item The third part ($F_k(x + 1)$) is also a secure PRF with the same reason like above.
+
+\end{enumerate}
+
+However, the first part of this encryption scheme includes the key within its algorithm. An attacker could follow this part of this encryption scheme. He can query a message to the oracle and receive the ciphertext back. The algorithm that the attacker can use after getting the ciphertext back:
+\begin{enumerate}
+\item Extract the last n-bits of the ciphertext. This is where he gets $x \xor k$. Call this part $\Omega$.
+\item He can $\Omega \xor x = k$ to get the key. \\
+ Hence, it's \textbf{not secure}.
+
+\end{enumerate}
+\item $F''_k(x) = F_{k_1}(x) \xor F_{k_2}(x)$, where $k = k_1 \concat k_2$, and each of $k_1, k_2, x$ is of length $n$ bits.
+This is a secure PRF for the following reason:
+\begin{enumerate}
+\item F is a secure PRF. $k_1$ and $k_2$ are random secret. Therefore, $F_{k_1}(x)$ and $ F_{k_2}(x)$ are secure PRF and provide pseudo random outputs.
+\item If we $Xor$ two pseudo random outputs together then it's also a pseudo random output.
+\end{enumerate}
+Therefore, $F''_k(x)$ is a \textbf{secure PRF}.
+
+\item $F'''_k(x) = k_1 \concat F_{k_2}(x)$, where $k = k_1 \concat k_2$ and each of $k_1, k_2, x$ is of length $n$ bits.
+This is a \textbf{secure PRF} for the following reason:
+\begin{enumerate}
+\item The attacker knows how k is constructed.
+\item The attacker can find out what is $k_1$ by extract the last $n$ bits of the output of the $F'''_k(x)$ (This functions outputs $2n$ bits).
+\item The attacker, now, knows about the first half part of the key. However, he still doesn't know the second part of the key. Therefore, $F_{k_2}(x)$ is still a PRF.
+\end{enumerate}
+\end{enumerate}
+
+# Problem 2
+
+\begin{enumerate}
+\item Given message $m \in \zo^{n}$, choose random string $r \in \zo^{n/2}$, and form an encryption as: let $y = G(r)$, $E_k(m) = (y, F_k(y)\oplus m)$. \\
+The decryption schem is as follow: $D_k(c) = (y, F_k(y) \xor c)$. This is \textbf{a secure encryption} scheme since $E_k(m)$ constructed by 2 part:
+\begin{enumerate}
+\item The first part $y$ is PRG which will output random pseudo so it's secure.
+\item The second part involves a PRG within a PRF so the output of $F_k(y)$ will be pseudo random.
+\item Xor that output with the message will produce another pseudo random string.
+\end{enumerate}
+Therefore, this encryption scheme is secure.
+
+\newpage
+
+\item Given message $m \in \zo^{n}$, choose a random string $r\in \zo^{n}$ and encrypt $m$ as $E_k(m) = (r, lsb(F_k(r))\concat (F_k(r)\oplus m))$ where $lsb$ is the least significant bit. \\
+Lets assign the output of $E_k(m) = (c_0,c_1)$ where $c_0 = r$ and $c_1 = lsb(F_k(r)) \concat F_k(r) \xor m))$. The decryption algorithm is constructed as follow. On $c_1$, extract the lsb, take the rest XOR with $F_k(r)$ to recover the message. \\
+This is \textbf{not a secure} encryption scheme since the attacker can use an advantage given in the part: $lsb(F_k(r))$. He can queries two message $m_0 = 0000...000000$ and $m_1 = 1111...111111$. Having the knowledge of the $lsb(F_k(r))$. He can XOR that bit with the lsb of $m^{*}$ to tell which one is $m_0$ and $m_1$. This give the attacker 100\% chance to distinguish which one is $m_1$ and which one is $m_0$.
+\item Given message $m \in \zo^{3n}$, parse $m$ as $m = m_1 \concat m_2 \concat m_2$ where $|m_1| = |m_2| = |m_3| = n$, then choose a random $r \in \zo^{n/2}$ and $r' \in \zo^n$ and encrypt $m$ as: 
+$E_k(m) = (r, r', G(r) \oplus m_1, F_k(r')\oplus m_2, F_k(r' + 1) \oplus m_3)$. \\
+This is \textbf{not a secure} encryption scheme since the algorithm includes $r$ and $r^{'}$ within the algorithm. In addition, The algorithm $G$ is public, so the attacker can evaluate $G(r)$. He can use this to XOR with the third part of the algorithm $G(r) \xor m$ to obtain $m_1$ which is the last n bits of the original message. The CPA attacker can tell what $m_b$ is base on this flaw of the encryption algorithm. The successful rate of this attacker is 100\%.
+\end{enumerate} 
+
+# Problem 3
+- Since deterministic encryption scheme always produce the same output given the same input. If the CTO attacker observes two indetical ciphertexts, he can infers that they came from the same plaintext. He can build a large dictionary of plaintext/ciphertext pair, and keep eavesdroping the channel to get a partial or maybe even full message. It's just the matter of time for this type of attack. Therefore, it is \textbf{not secure}.
+- This is \textbf{still secure}. At the first time when the attacker queries $m_0$ and $m_1$ to the oracle. The oracle uses two different values of $r$, and the attacker receives $c_0$ and $c_1$. When the oracle challenges the attacker with $c_{b}$ he uses different $r$ than the previous one. Therefore, $c_{b}$ is indistinguishable from $c_0$ and $c_1$. The output of $F_k(r) \xor m$ is 1 bit, so he has an equal advantage of 50\% to guess this is the output of the PRF and from the true random function. Hence, his advantage is $0.5 - 0,5 = 0 \%$.

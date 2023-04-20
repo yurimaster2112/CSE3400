@@ -1,0 +1,116 @@
+---
+geometry: "top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm"
+mainfont: Times New Roman
+fontsize: 11pt
+output:
+    pdf_document:
+        extra_dependencies: ["pdfpages"]
+        keep_tex: yes
+        toc: true
+        toc_float: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+- \usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+- \usepackage{mathtools}
+- \usepackage{lastpage}
+- \usepackage{enumerate}
+- \usepackage{fancyhdr}
+- \usepackage{mathrsfs}
+- \usepackage{xcolor}
+- \usepackage{graphicx}
+- \usepackage{listings}
+- \usepackage{hyperref}
+- \usepackage{titling}
+- \pretitle{\begin{flushleft}}
+- \posttitle{\end{flushleft}} 
+- \preauthor{\begin{flushleft}}
+- \postauthor{\end{flushleft}} 
+- \predate{\begin{flushleft}}
+- \postdate{\end{flushleft}} 
+---
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+\renewcommand\lstlistingname{Python}
+\renewcommand\lstlistlistingname{Python}
+\def\lstlistingautorefname{Python}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines,
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\newcommand\course{CSE 3400}
+\newcommand\hwnumber{3}
+\newcommand\NetIDa{NetID: 2995060}
+\newcommand\Name{Pham Hoang Long Do}
+\newcommand\Prof{Ghada Almashaqbeh}
+
+\newcommand*\concat{\mathbin{\|}}
+\newcommand\xor{\oplus}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\Name\\\NetIDa}
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \Prof}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+# Problem 1
+\begin{enumerate}
+\item Charlie's claim is \textbf{true} since we are not using the same key to encrypt each segment of the message again. Therefore, a CPA attacker can't recognize the pattern if a message has repeated words since repeated words use different key to encrypt so the ciphertext will be different. $E_{k_{i}}^{i}(m_{i}) \neq E_{k_{j}}^{j}(m_{j})$ where $m_i = m_j$ since $k_i \neq k_j$
+\item Ronald's claim is \textbf{true} since giving the attacker the advanced knowledge of $c_0(IV)$ doesn't let him gain advatage of knowing any information about the message since the security of the encryption scheme still rely on the key. The attacker will know about $c_i$ where $i \in {0,1,2,3,..}$ but without the knowledge of the key he can't decrypt the ciphertext to know $m_b$ where $b \in {1,2}$. Therefore, this encryption scheme is still secure agaisnt CPA attacker.
+\item part 3a
+\begin{enumerate}
+\item OFB: The whole message will be corrupted since $IV$ is wrong. Therefore, $pad_1, pad_2,...,pad_t$ will be wrong. In this situation, Bob can't recover or gain any information about the message that Alice sent.
+\item CBC: The first 5 blocks of the message will be corrupted, the rest will be fine $(m_5,m_6,...,m_t)$ since starting from $c_5$, it will depend on $c_4$ to get the correct message and $c_4$ is in the right order. Therefore, only first 5 blocks will be corrupted, and the rest is good.
+\item CTF: The entire of the message will be corrupted since the initial value of the counter is $c_1$ not $c_0$. 
+\end{enumerate}
+\item part 3b
+\begin{enumerate}
+\item OFB: Yes. $m_1$ will correct. $m_2$ and $m_3$ will be corrupted since $c_2$ and $c_3$ are out of order. The rest of the message, $m_4,...,m_t$ will correct.
+\item CBC: Yes. $m_1$ will correct, but $m_2, m_3, m_4$ will be corrupted since these are affected by $c_2, c_3$ out of orderness. The rest, $m_5,...,m_t$ will correct.
+\item CTF: Yes. Only $m_2$ and $m_3$ are corrupted since we have the correct initial value of the counter but $c_2$ and $c_3$ are out of order. The rest of the message will be fine $m_1$ and $m_4,...m_t$.
+\end{enumerate}
+\item part 4
+\begin{enumerate} 
+\item If Eve dropped $c_0$ then on the receiver side, the initial counter value won't be received hence it's impossible to decrypt the message. 
+\item If Eve dropped $c_{13}$ then only $m_{13}$ will be affected, the rest of the message from $m_0,...,m_{12}$ and $m_{14},...,m_{20}$ will be intact and the receiver will be able to decrpyt those blocks. 
+\item If Eve dropped $c_{20}$ then only the last block $m_{20}$ will be affected. The rest of the message $m_1,...,m_{19}$ will be intact and the receiver will be able to decrpyt those blocks.
+\item If Eve flipped the order of the ciphertext then the entire message will be corrupted since the decryption depend on the initial counter value $c_0$ which is now become $c_{20}$ and $c_i$ where $i \in {1,2,3,...,20}$ but now the order is swapped.
+\end{enumerate}
+
+\end{enumerate}
+
+# Problem 2
+
+Let $G:\zo^{n/2} \to \zo^{n}$ be a PRG, and $F:\zo^n \times \zo^n \to \zo^n$ be a PRF. For each of the following MAC constructions, state whether it is a secure MAC and justify your answers.
+\begin{enumerate}
+\item Given message $m \in \zo^{3n/2}$, parse $m = m_0 \concat m_1$ such that $|m_0| = n$ and $|m_1| = n/2$, then compute the tag as $MAC_k(m) = F_k(m_0) \concat G(m_1)$. \\
+- This is a \textbf{secure} MAC since the tag function $MAC_k(m) = F_k(m_0) \concat G(m_1)$ produce an output of $\{0,1\}^{2n}$ which can cover the entire message of length $\frac{3n}{2}$. Basically, we can pad $\frac{n}{2}$ length of all zeros to the front of the message. In addition, since $F_k(m_0)$ a secure MAC since every PRF is a secure MAC. We can use the concatenation property which states that as long as either $F$ or $G$ is a secure MAC then the output will be a secure MAC.
+\item Given message $m \in \zo^{n}$, compute $y = F_k(m)$, parse $y = y_0 \concat y_1$ such that $|y_0| = |y_1| = n/2$, then compute the tag as $G(y_0)$. \\
+- This is a \textbf{secure} MAC since the output of $y$ is the output of a PRF which is pseudo random. Taking $y_0$ which has length of $\frac{n}{2}$ as the input of a PRG will provide a indistiguishable pseudo random output. Therefore, the tag is secure and attacker has a probability of guessing the correct tag is $\frac{1}{2^n}$.
+\item Given message $m \in \zo^{2n}$, parse $m$ as $m = m_0 \concat m_1 $ such that $|m_0| = |m_1|= n$. Compute the tag as $MAC_k(m) = (F_k(0^n), F_k(m_0 \oplus m_1)$). \\
+- The first part of the MAC: $F_k(0^n)$ is fixed and deterministic, so an attacker will recognize the pattern of the first part after a few queries. In stead, he will focus on the second part, lets call it $tag_2$. The attacker can submit a querry m where $m = m_0 \concat m_1$ and obtain $tag_2$. Since Xor is communicative; therefore, $m_0 \xor m_1 = m_1 \xor m_0$. The attacker can sumbit back to the oracle a new message $m^{'} = m_1 \concat m_0$ along with the tag $m_1 \xor m_0$. This message and its tag is valid since it hasn't been recored by the oracle. Therefore, it is \textbf{not a secure} MAC in which the attacker has a success chance of 1.
+\item A variation of the CMAC construction: we compute a tage as $tag = CMAC_k(m) = CBC-MAC(L(m)) \concat CBC-MAC_k(m)$, and $m$ is a VIL (can be of any length such that it is an integer number of blocks) and $L(m)$ is a block representing the length of the message $m$. \\
+- Let $f = CBC-MAC(L(m))$ and $g = CBC-MAC_k(m)$. This is \textbf{not a secure} MAC since neither of $f$ and $g$ a secure MAC. For $g$, we know in class that a CBC-MAC without prepend is not secure. For f, the attacker can use to different messages but with the same length. For example, he can querry $m_1$ and receive the tag $b$. Now, he can submitting his answer to the oracle by submit a new message $m_2 = c\times m_1$ where $c = m_1 \xor b$ and $|m_2| = |m_1|$. The tag for $m_2$ is still $b$ (proved in class). This is valid since the attacker did not ask for $m_2$ and $b$ is a valid tag for $m_2$. The successful chance of this attacker is 1.
+\end{enumerate}

@@ -1,0 +1,208 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, CSE Dept.}
+
+\noindent
+{\bf Spring 2023}
+
+\noindent
+{\bf CSE 3400/CSE 5080: Introduction to Computer and Network Security \\(or Introduction to Cybersecurity)}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Midterm Exam}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: Monday, 3/6/2023, 8:00 pm}
+
+\noindent
+{Submission deadline: Wednesday, 3/8/2023, 8:00 pm} \\\\
+
+\begin{itemize}
+    \item This is a take-home exam with a duration of 48 hours. Please maintain the ethical code; this is an individual exam, no communication about the exam between students and no collaborations are allowed.
+    \item This is an open book exam. You can use only the course material; slides/textbook/practice problems/homeworks, but not external resources (e.g., searching the Internet, external material, other textbooks, any external help, etc.).
+    \item Questions for the instructor/TAs, by email and/or discord are welcome---only about clarifying the problems or something in the material but not about whether your answers are correct.
+    \item Answers must be typed. Scanned handwritten submissions will NOT be accepted. Submit your answers as a PDF file. Use Latex, Word, or any other word-processor and then convert to PDF. 
+    \item Submission must be done using HuskyCT.  After you submit, and before the deadline passes, make sure that the submission renders correctly, and that you submitted your solutions rather than just a copy of the exam problems, etc. If not, submit again. Any corrupted submissions will get a score of 0 after the deadline passes. Late submissions will not be allowed.
+    \item Please read every question (and the notes after it) carefully.
+    \item Provide concise, complete and precise answers. Avoid ambiguities.
+     
+\end{itemize}
+\bigskip
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+ \begin{tabular}{|| c | c | c | c ||} 
+ \hline\hline
+ Problem & Points & Received  \\ 
+ \hline\hline
+ Problem 1 & 30 &  \\ 
+ \hline
+ Problem 2 & 30 &  \\
+ \hline
+ Problem 3 & 30 &  \\
+ \hline
+ Problem 4 & 10 &  \\
+ \hline
+ \hline
+ Total & 100 &  \\ [1ex]
+ \hline\hline
+\end{tabular}
+\end{center}
+
+
+\newpage
+\noindent{\bf Problem 1 [30 points]\\}
+\begin{enumerate}
+    \item Let $G: \zo^{n} \rightarrow \zo^{3n}$ be a PRG. Define $F_k(x)$ so that to evaluate $F$ over any input $x$ we do the following: 
+    \begin{enumerate}
+        \item Compute $y = G(k)$ 
+        \item Parse $y$ as $y = y_1 \concat y_2 \concat y_3$ where $|y_1| = |y_2| = |y_3| = n$
+        \item Output $F_k(x) = (y_1 \xor 0^n) \concat (y_2 \xor 1^n) \concat (y_3 \xor x)$ (where $x$ is of length $n$ bits)
+    \end{enumerate}
+    Is $F$ a PRF? Justify your answer.
+    
+    \item Let $F: \zo^n \times \zo^{n} \rightarrow \zo^{n}$ be a PRF and $G: \zo^{n} \rightarrow \zo^{2n}$ be a PRG.
+    Define $F'_k(x)$ so that to evaluate $F'$ over any input $x$ we do the following:
+    \begin{enumerate}
+        \item Generate a random string $t$ of length $n$ bits
+        \item Output $F'_k(x)= G(t) \concat F_k(x)$ (where $x$ is of length $n$ bits). 
+    \end{enumerate}
+    Is $F'$ a PRF? Justify your answer.
+    
+    \item Let $Shift(x,i)$ be a function that takes $n$ bit string as input and shifts the bits of this input to the right by $i$ places. That is, take input $x = x_1 \concat x_2 \concat \dots \concat x_n$, where each $x_j$ is a single bit, and $i = 2$ for example, we have $Shift(x, 2) = Shift(x_1 \concat x_2 \concat \dots \concat x_n, 2) = 0 \concat 0 \concat x_1 \concat x_2 \concat x_3 \concat \dots \concat x_{n-2}$, and so on. 
+    
+    Let $F: \zo^n \times \zo^{n} \rightarrow \zo^{n}$ be a PRF. Define $F'_k(x) = Shift(F_k(x), lsb(x))$ where $lsb(x)$ is the least significant bit of $x$ and $x$ is a string of $n$ bits.
+    
+    Is $F'$ a PRF? Justify your answer.
+
+\end{enumerate}
+
+
+\noindent{\bf Note:} As usual, justify your answer means that if the scheme is insecure then provide an attack against it and informally analyze its success probability. If the scheme is secure, provide an informal convincing argument (formal security proofs are not required).\newline
+
+\noindent{\bf Note:} In all of the above $n$ is a large integer.\newline
+% ***********************************************************************************************
+\newpage
+\noindent{\bf Problem 2 [30 points]\\}
+\begin{enumerate}
+\item Let $G:\zo^{n/2} \to \zo^{n}$ be a PRG, and $F:\zo^n \times \zo^n \to \zo^n$ be a PRF. Given message $m \in \zo^{2n}$, parse $m$ as $m = m_1 \concat m_2$ where $|m_1| = |m_2| = n$, then choose a random strings $r \in \zo^{n/2}$ and $r' \in \zo^n$, and some string $t \in \zo^{n/2}$ ($t$ could be anything not necessarily random), then encrypt $m$ as:\\
+$E_k(m) = (r, r', t, F_k(G(r \xor t)) \oplus m_1, F_k(r')\oplus m_2$). 
+
+What is the decryption algorithm? Is this an IND-CPA secure encryption scheme? Justify your answer.   
+
+\item Let $F: \zo^n \times \zo^n \rightarrow \zo^{n}$ be a PRF. Form an encryption as follows: Given message $m \in \zo^{n}$, choose a fresh random $r \in \zo^n$ and encrypt as $E_k(m) = (r, m \oplus F_k(m \xor r))$. 
+
+What is the decryption algorithm? Is this an IND-CPA secure encryption scheme? Justify your answer.
+
+\item Bob is using an encryption scheme $E_k$ that leaks one bit of the key with each encryption invocation (where $|k| = 256$). That is, when encrypting the first message, the first bit of the key will be leaked, when encrypting the second message, the second bit of the key will be leaked, and so on (so the attacker will get the leaked bits).
+
+Bob claims that this will not break CPA security because: (1) the leaked bits are from the key not from the plaintext message, and (2) he will use this scheme to encrypt only 256 messages and then will generate a new key.
+
+Is Bob's claim correct? Justify your answer.
+\end{enumerate} 
+
+
+\noindent{\bf Note:} As usual, justify your answer means that if the scheme is insecure then provide an attack against it and informally analyze its success probability. If the scheme is secure, provide an informal convincing argument (formal security proofs are not required).\newline
+
+\noindent{\bf Note:} In all of the above $n$ is a large integer.\newline
+
+
+% ***********************************************************************************************
+\newpage
+\noindent{\bf Problem 3 [35 points]} (5 points extra)\\
+\vspace{-15pt}
+\begin{enumerate}
+    \item Let $P: \zo^n \times \zo^n \rightarrow \zo^{n}$ be a PRP, $G: \zo^n \rightarrow \zo^{2n}$ be a PRG, and $F: \zo^n \times \zo^n \rightarrow \zo^n$ be PRF. State whether the following constructions are secure MACs and justify your answers (in all of these $n$ is a large enough integer).  
+
+    \begin{enumerate}
+        \item Given a message $m \in \zo^{2n}$, parse $m = m_0 \concat m_1$ such that $|m_0| = |m_1| = n$, then compute the tag as $MAC_k(m) = P_{k_0}(m_0) \concat F_{k_1}(m_1)$, where $k = k_0 \concat k_1$ and $|k_0| = |k_1| = n$.  
+
+        \item Given a message $m \in \zo^{n}$, compute the tag as $MAC_k(m) = F_{k_0}(m) \concat G(F_{k_1}(m))$, where $k = k_0 \concat k_1$ and $|k_0| = |k_1| = n$. 
+    \end{enumerate}
+ \noindent{\bf Note:} If the scheme is insecure then provide an attack against it and informally analyze its success probability. If the scheme is secure, just provide a convincing argument.
+ 
+    \item Suppose Alice has private medical records with some hospital, and she wants to give access to doctors outside this hospital to her medical data. She does that by sending the hospital encrypted messages of the form ``Let $<DoctorX>$ access $<file Y>$", where the field $<DoctorX>$ will contain the doctor name, e.g., Bob, and the field $<file Y>$ will contain the particular medical file. 
+    
+    The message is encrypted using a block cipher, where the message is divided into 4 blocks: $m_1 = Let$, $m_2 = <DoctorX>$, $m_3 = access$, and $m_4 = <file Y>$ (assume all these will be padded correctly to be full blocks each of size $n$ bits).
+
+    Alice sent 3 messages to the hospital: ``Let Bob access fileA", ``Let Ronald access fileB", and `` Let Serine access fileC". Note that files could be updated over time (like in a week, new medical information will be added to, e.g., fileC, and so on.)
+
+    There is a man in the middle attacker, Mal, who is intercepting all messages sent from Alice to the hospital---she may drop, replay (send previously sent messages again), or modify these  messages.
+    \begin{enumerate}
+        \item What type of damage (or attacks) can Mal do when the messages are only encrypted (as above) before being sent to the hospital? why?
+        
+        \item Security expert Richard advised Alice to combine encryption with a secure MAC using the EtA approach. Will that new approach change your answer for part (a)? why?
+        
+        \item Another security expert, Randy, advised Alice to replace the secure MAC in part (b) with a CRHF hash function claiming that this will not impact security. Is that true? why?
+        
+        \item A third security expert, Sponge, advised Alice to add a unique counter for each message she sends and then use the EtA approach in part (b). That is, the first message will be ``1Let Bob access fileA", so $m_1 = 1Let$, and the second message will be ``2Let Ronald access fileB", and so on. The hospital will first check that the counter value in the message is new (i.e., larger than the last one received from Alice) before accepting a message. If the counter value is not larger than the latest one, the hospital will drop the message. 
+
+        What type of damage this approach will prevent compared to the original approach in part (b)? why?
+    \end{enumerate}
+\end{enumerate}
+
+
+
+% ***********************************************************************************************
+\newpage
+\noindent{\bf Problem 4 [10 points]\\}
+For each of the following, mark TRUE or FALSE. No justification is needed.
+\begin{enumerate}
+    \item The letter frequency cryptanalysis attack against monoalphabetic substitution cipher will not work if the text being encrypted is some random list of letters (rather than sensible text).
+    
+    \item A hash function with a security parameter $n = 4$, i.e., the output length is 4 bits, can be a CRHF based on its construction.
+    
+    \item For CRHF hash functions, to obtain effective security of at least 128 bits, the output length must be at least $n = 256$.
+    
+    \item According to Kerckhoff's principle, if we have a PRF that is built out of a PRG, it is fine to keep the PRG construction private as long as the the way it is being used in the PRF construction is public.
+    
+    \item To reduce the overhead of communication in the software distribution application (in the slides of lecture 6), a secure version of this application is to let the repository in DC send the software package and the hash of this package to the user in NY (so no need to contact the developer in LA).
+\end{enumerate}
+\end{document} 

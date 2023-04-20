@@ -1,0 +1,115 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, CSE Dept.}
+
+\noindent
+{\bf Spring 2023}
+
+\noindent
+{\bf CSE 3400/CSE 5080: Introduction to Computer and Network Security \\(or Introduction to Cybersecurity)}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Assignment 3}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: 2/24/2023}
+
+\noindent
+{Submission deadline: 3/3/2023, 11:59 pm} \\\\
+
+\noindent{\bf Notes:} 
+\begin{itemize}
+\item Solutions {\bf must be typed} (using latex or any other text editor) and must be submitted as a pdf (not word or source latex files).
+
+\item This homework will have a \textbf{shorter late days allowance} than usual. It will be \textbf{only 1 day} to allow us to post the key solution before the midterm exam. And as usual, if you still have free late days, you can use 1 day, and if not, there will be a deduction for the late day. After 1 day from the deadline no late submissions will be accepted.
+\end{itemize}
+
+
+\noindent{\bf Problem 1 [50 points]\\}
+This problem is about encryption modes.
+\begin{enumerate}
+\item Charlie claims that if we modify the ECB mode as follows, it will become CPA secure: All messages to be encrypted are composed of 4 blocks, i.e., any message $m$ it is $m = m_0 \concat m_1 \concat m_2 \concat m_3$, and we use 4 different block ciphers instead of one, so there will be $E^1, E^2, E^3, E^4$. That is, we have key $k = k_1 \concat k_2 \concat k_3 \concat k_4$, to encrypt $m_i$, we have $c_i = E^i_{k_i}(m_i)$ for $i \in \{1, 2, 3, 4\}$. Is Charlie's claim true? why? 
+
+\item For the OFB mode, Ronald got the following idea. He is communicating with Nina very often so he thought: instead of sending a new IV for every new encrypted message sent to Nina, he will use a counter. That is, initially $IV = 0$, to encrypt the first message $m^{(1)}$, he uses $IV = 0$, then to encrypt the second message $m^{(2)}$ he uses $IV = 1$, and so on (note that the messages to be encrypted could be composed of multiple blocks). So there is no need to send the IV value to Nina. He claims that security against CPA is preserved in this case. Is Ronald's claim true? why? 
+
+\item What is the effect of the following ciphertext reordering on correctness of decryption for the OFB, CBC and CTR modes (note that for CTR mode, $c_0 = s$ is the initial value of the counter): 
+\begin{enumerate}
+    \item Alice sent Bob ciphertext $c_0, c_1, c_2, c_3, c_4 \dots, c_t$, which was received by Bob as $c_1, c_0, c_3, c_2, c_4, c_5, \dots, c_t$ (so only the first 4 blocks were reordered) and he does not know that there was reordering. Justify your answers. 
+
+    \item Will the effect be different if the reordering is as follows: $c_0, c_1, c_3, c_2, c_4, c_5, \dots, c_t$ for all these modes? justify your answers.
+\end{enumerate} 
+
+\item Alice and Bob are communicating by sending messages encrypted using CTR mode of operation. Eve is monitoring the channel and is dropping some ciphertext blocks. Bob does not know the number of blocks he is supposed to receive, so whatever he receives he thinks this is the complete encrypted message that Alice sent.
+
+Assume Bob sent a message $m = m_1 \concat \dots \concat m_{20}$ encrypted as $c = c_0 \concat \dots \concat c_{20}$ (where again $c_0 = s$ is the initial value of the counter). What is the effect on the correctness of decryption if Eve drops $c_0$? or if she drops $c_{13}$? or if she drops $c_{20}$?
+
+What happens if Eve flips the order of the ciphertext blocks? That is, Bob receives $c = c_{20} \concat c_{19} \concat \dots \concat c_0$.
+
+Justify your answers for all cases.
+\end{enumerate}
+% ***********************************************************************************************
+
+\noindent{\bf Problem 2 [50 points]\\}
+Let $G:\zo^{n/2} \to \zo^{n}$ be a PRG, and $F:\zo^n \times \zo^n \to \zo^n$ be a PRF. For each of the following MAC constructions, state whether it is a secure MAC and justify your answers.
+\begin{enumerate}
+\item Given message $m \in \zo^{3n/2}$, parse $m = m_0 \concat m_1$ such that $|m_0| = n$ and $|m_1| = n/2$, then compute the tag as $MAC_k(m) = F_k(m_0) \concat G(m_1)$.
+
+\item Given message $m \in \zo^{n}$, compute $y = F_k(m)$, parse $y = y_0 \concat y_1$ such that $|y_0| = |y_1| = n/2$, then compute the tag as $G(y_0)$.
+
+\item Given message $m \in \zo^{2n}$, parse $m$ as $m = m_0 \concat m_1 $ such that $|m_0| = |m_1|= n$. Compute the tag as $MAC_k(m) = (F_k(0^n), F_k(m_0 \oplus m_1)$).
+
+\item A variation of the CMAC construction: we compute a tage as $tag = CMAC_k(m) = CBC-MAC(L(m)) \concat CBC-MAC_k(m)$, and $m$ is a VIL (can be of any length such that it is an integer number of blocks) and $L(m)$ is a block representing the length of the message $m$.
+\end{enumerate} 
+
+
+\noindent{\bf Note:} if the scheme is insecure then provide an attack against it and analyze its success probability. If the scheme is secure, just provide a convincing argument (formal security proofs are not required).
+\\
+
+\end{document} 

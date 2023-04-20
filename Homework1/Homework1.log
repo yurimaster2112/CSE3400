@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.27)  31 JAN 2023 16:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.27)  3 FEB 2023 14:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -570,7 +570,7 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 ) [1{/home/yuri/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-</home/yuri/Gits/CSE3400/Homework1/test_result.png, id=52, 713.66624pt x 307.1475pt>
+</home/yuri/Gits/CSE3400/Homework1/test_result.png, id=60, 713.66624pt x 307.1475pt>
 File: /home/yuri/Gits/CSE3400/Homework1/test_result.png Graphic file (type png)
 <use /home/yuri/Gits/CSE3400/Homework1/test_result.png>
 Package pdftex.def Info: /home/yuri/Gits/CSE3400/Homework1/test_result.png  used on input line 205.
@@ -585,25 +585,25 @@ LaTeX Warning: Command \texttildelow invalid in math mode on input line 228.
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 238.
 (/home/yuri/.TinyTeX/texmf-dist/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) 
+) [3] 
 AED: lastpage setting LastPage
-[3] (./Homework1.aux)
+[4] (./Homework1.aux)
 Package rerunfilecheck Info: File `Homework1.out' has not changed.
-(rerunfilecheck)             Checksum: 82C02FB8AF4C014655588A36757BAD4A;450.
+(rerunfilecheck)             Checksum: 31FCAE3D7D8511E2EC0EFB23CCD40067;624.
  ) 
 Here is how much of TeX's memory you used:
- 14255 strings out of 478025
- 222498 string characters out of 5840303
+ 14269 strings out of 478025
+ 222611 string characters out of 5840303
  1876305 words of memory out of 5000000
- 34085 multiletter control sequences out of 15000+600000
+ 34089 multiletter control sequences out of 15000+600000
  568768 words of font info for 69 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  63i,17n,67p,523b,1551s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Homework1.pdf (3 pages, 264230 bytes).
+{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/yuri/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/yuri/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on Homework1.pdf (4 pages, 289451 bytes).
 PDF statistics:
- 158 PDF objects out of 1000 (max. 8388607)
- 128 compressed objects within 2 object streams
- 51 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 184 PDF objects out of 1000 (max. 8388607)
+ 151 compressed objects within 2 object streams
+ 61 named destinations out of 1000 (max. 500000)
+ 62 words of extra memory for PDF output out of 10000 (max. 10000000)
 

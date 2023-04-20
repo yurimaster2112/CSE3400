@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, CSE Dept.}
+
+\noindent
+{\bf Spring 2023}
+
+\noindent
+{\bf CSE 3400/CSE 5080: Introduction to Computer and Network Security \\(or Introduction to Cybersecurity)}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Assignment 2}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: 2/10/2023}
+
+\noindent
+{Submission deadline: 2/18/2023, 11:59 pm} \\\\
+
+\noindent{\bf Note:} Solutions {\bf must be typed} (using latex or any other text editor) and must be submitted as a pdf (not word or source latex files).\\
+\noindent{\bf Note:} This homework will have a \textbf{shorter late days allowance} than usual. It will be only 4 days (instead of the usual 5), after which no late submissions will be accepted. And as usual, if you still have free late days, you can up to 4 days from them, and if not, there will be a deduction for late days.\\
+
+\noindent{\bf Problem 1 [45 points]\\}
+Let $F:\zo^n \times \zo^n \to \zo^n$ be a PRF, state whether the following constructions are PRFs (in all parts $k$ is a long random secret key).
+
+\begin{enumerate}
+\item $F'_k(x) = (x \oplus k) \concat F_k(x) \concat F_k(x + 1)$, where each of $k$ and $x$ is of length $n$ bits.
+
+\item $F''_k(x) = F_{k_1}(x) \xor F_{k_2}(x)$, where $k = k_1 \concat k_2$, and each of $k_1, k_2, x$ is of length $n$ bits.
+
+\item $F'''_k(x) = k_1 \concat F_{k_2}(x)$, where $k = k_1 \concat k_2$ and each of $k_1, k_2, x$ is of length $n$ bits.
+\end{enumerate}
+
+\noindent{\bf Note:} if the scheme is not a PRF then provide an attack against it and informally analyze/justify its success probability. If the scheme is a PRF, just provide a convincing argument (formal proofs are not required) and state why the attacker advantage is negligible. \\
+
+% ***********************************************************************************************
+
+\noindent{\bf Problem 2 [45 points]\\}
+Let $G:\zo^{n/2} \to \zo^{n}$ be a PRG, and $F:\zo^n \times \zo^n \to \zo^n$ be a PRF. For each of the following encryption constructions, state the decryption algorithm, and then state whether it is a secure encryption scheme against a CPA attacker.  (All the following are block ciphers; we encrypt $m$ all at once, they are not stream ciphers). (In all parts $k$ is a long random secret key)  
+\begin{enumerate}
+\item Given message $m \in \zo^{n}$, choose random string $r \in \zo^{n/2}$, and form an encryption as: let $y = G(r)$, $E_k(m) = (y, F_k(y)\oplus m)$.  
+
+\item Given message $m \in \zo^{n}$, choose a random string $r\in \zo^{n}$ and encrypt $m$ as $E_k(m) = (r, lsb(F_k(r))\concat (F_k(r)\oplus m))$ where $lsb$ is the least significant bit.
+
+\item Given message $m \in \zo^{3n}$, parse $m$ as $m = m_1 \concat m_2 \concat m_2$ where $|m_1| = |m_2| = |m_3| = n$, then choose a random $r \in \zo^{n/2}$ and $r' \in \zo^n$ and encrypt $m$ as:\\
+$E_k(m) = (r, r', G(r) \oplus m_1, F_k(r')\oplus m_2, F_k(r' + 1) \oplus m_3)$.
+\end{enumerate} 
+
+
+\noindent{\bf Note:} if the scheme is insecure then provide an attack against it and informally analyze its success probability. If the scheme is secure, just provide a convincing argument (formal security proofs are not required).
+
+
+
+% ***********************************************************************************************
+\newpage
+\noindent{\bf Problem 3 [15 points]\\}
+\begin{itemize}
+    \item We know that a deterministic encryption scheme is not secure against a CPA attacker. Is it secure against a CTO attacker? why?
+    
+    \item For the basic PRF-based encryption scheme we took in class (which is provably secure against CPA attacker), we use a PRF (call it $F$), for each message a random string $r$ is generated and then encryption is $E_k(m) = (r, F_k(r) \xor m)$. Is this scheme still secure against a CPA attacker if the length of the message $m$ (and so the output of the PRF) is 1 bit? why?  
+\end{itemize}
+\noindent{\bf Note:} this problem has 5 points extra.\\
+\end{document} 

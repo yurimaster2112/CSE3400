@@ -1,0 +1,192 @@
+---
+geometry: "top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm"
+mainfont: Times New Roman
+fontsize: 11pt
+output:
+    pdf_document:
+        extra_dependencies: ["pdfpages"]
+        keep_tex: yes
+        toc: true
+        toc_float: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+- \usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+- \usepackage{mathtools}
+- \usepackage{lastpage}
+- \usepackage{enumerate}
+- \usepackage{fancyhdr}
+- \usepackage{mathrsfs}
+- \usepackage{xcolor}
+- \usepackage{graphicx}
+- \usepackage{listings}
+- \usepackage{hyperref}
+- \usepackage{titling}
+- \pretitle{\begin{flushleft}}
+- \posttitle{\end{flushleft}} 
+- \preauthor{\begin{flushleft}}
+- \postauthor{\end{flushleft}} 
+- \predate{\begin{flushleft}}
+- \postdate{\end{flushleft}} 
+---
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+
+\renewcommand\lstlistingname{Python}
+\renewcommand\lstlistlistingname{Python}
+\def\lstlistingautorefname{Python}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines,
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\newcommand\course{CSE 3400}
+\newcommand\hwnumber{3}
+\newcommand\NetIDa{NetID: 2995060}
+\newcommand\Name{Pham Hoang Long Do}
+\newcommand\Prof{Ghada Almashaqbeh}
+
+\newcommand*\concat{\mathbin{\|}}
+\newcommand\xor{\oplus}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\Name\\\NetIDa}
+\chead{\textbf{\Large Midterm}}
+\rhead{\course \\ \Prof}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+# Problem 1
+
+## Problem 1.1
+
+- This is \textbf{not a secure} PRF for the following reason:
+\begin{enumerate}
+\item Since the attacker has the access to the oracle, he can submit as many queries as he wants.
+\item The attacker submits a queries and gets back the ciphertext $F_k(x)$ which has the length of $3n$ bits.
+\item He can divide the ciphertext into 3 blocks. Each block has the length n bits.
+\item The first block is $y_1 \xor 0^{n}$. He can uses this block to xor with $0^{n}$ again to retrieve the first part of the key. He knows $n$ since he is the one who generates the message.
+\item Same thing for the second block $y_2 \xor 1^{n}$. He use this block to xor with $1^{n}$ again to retrieve the second part of the key. Again, he knows how long his message is.
+\item Lastly, he uses the last block $y_3 \xor x$ to xor with his own message to retrieve the third part of the key. He knows his original message so it should not be the problem.
+\item After retrieve $y_1, y_2, y_3$ he can concatenate them together to get y which is the output of $G(k)$.
+\item Since G is deterministic and we keep reusing key $k$ whenver we evaluate a new input. Therefore, y is always deterministic.
+\item The success chance for this attacker to tell which one is a PRF and which one is truly random is 1, and the probability to regconize which one is truly random is $\frac{1}{3n}$
+\end{enumerate}
+$$
+\epsilon_{A,F}^{PRF}(n) = 1 - \frac{1}{3n}
+$$
+
+- $1 - \frac{1}{3n}$ is non-negligible as n sufficient large.
+
+
+## Problem 1.2
+- This is \textbf{a secure PRF} in a sense that:
+\begin{enumerate}
+\item We use t as a seed to a PRG, and we always generate new seeds everytime we invoke the security scheme. Therefore, the output of function $G(t)$ is \textbf{not deterministic}, pseudo random and indistinguishable from a truly random function.
+\item $F_k(x)$ is a PRF.
+\item We have a concatenation between two pseudo random output functions. Therefore, the result is pseudo random as well. Hencer, this is a secure PRF.
+\end{enumerate}
+
+## Problem 1.3
+- This is \textbf{a secure PRF} in a sense that:
+\begin{enumerate}
+\item This encryption scheme only has two options for shifting. Either shift to the right by 1 or not shift at all.
+\item If the $lsb(x) = 0$ which means that we not shift at all. Then the out put of $F_{k}^{'}(x)$ is the same as the output of $F_k(x)$
+\item If the $lsb(x) = 1$ which means that we shift the output of a PRF to the right by 1. Then the result still a PRF. The Attacker doesn't has any advantage to know the key or gain any information about the output of $F_k(x)$. Therefore, It's a secure PRF
+\end{enumerate}
+
+# Problem 2
+
+## Problem 2.1
+
+$E_k(m) = (r, r', t, F_k(G(r \xor t)) \oplus m_1, F_k(r')\oplus m_2$). Let assign $c_1 = F_k(G(r \xor t)) \oplus m_1$ and $c_2 = F_k(r')\oplus m_2$. We have the decryption algorithm as follow:
+
+$$
+D_k(c) = (r,r',t, c_1 \xor F_k(G(r \xor t)), c_2 \xor F_k(r')) = (r,r',t, m_1, m_2) \hspace{0.2cm}\text{where $m=m_1 || m_2$}
+$$
+
+- This is \textbf{a secure} encryption scheme in a sense that.
+\begin{enumerate}
+\item The attacker can submit two queries($m_0$ and $m_1$) of his choice that sastify ${0,1}^{2n}$
+\item Challenger picks a bit $b$ at random and encrypt $m_b$ and return the attacker the ciphertext $c^{*} = ENC_k(m_b)$
+\item The attacker receives $c^{*} = c_{0}^{*}, c_{1}^{*}, c_{2}^{*}, c_{3}^{*}, c_{4}^{*}$
+\item The attacker can compute $c_{0}^{*} \xor c_{2}^{*}$ together and put it into function G since G is public. He can put it to F. However, he won't know if his own calculated result will match the oracle result or not since he doesn't know the key. Same argument goes for $c_{4}^{*}$.
+\item He can't submit same queries again since r and r' are random and freshly generated for each query. So, this encryption scheme \textbf{deterministic}
+\end{enumerate}
+- Therefore this encryption scheme does not give out the key and randomized. Therefore, it's secure.
+
+## Problem 2.2
+
+$E_k(m) = (r, m \oplus F_k(m \xor r))$. The decryption algorithm is:
+$$
+D_k(r,c) = (r, c \xor F_k(r \xor c) \xor r)
+$$
+- This is \textbf{a secure} encryption scheme in a sense that:
+
+\begin{enumerate}
+\item The attacker can submit two queries($m_0$ and $m_1$) of his choice that sastify ${0,1}^{n}$
+\item Challenger picks a bit $b$ at random and encrypt $m_b$ and return the attacker the ciphertext $c^{*} = ENC_k(m_b)$
+\item The attacker receives $c^{*} = c_{0}^{*}, c_{1}^{*}$
+\item He can use $c_0$ to xor with $c_1$ or whatever he wants. However, the function: $m \xor F_k(m \xor r)$ is a randomized function. Even if the attacker try to submit the same query over again. The output will always different.
+\item This encryption scheme does not give out the key in it algorithm.
+\end{enumerate}
+- Therefore this is a secure IDN-CPA.
+
+## Problem 2.3
+
+- Yes. Bob's claim is \textbf{correct} since at the worst case scenario when the CPA attacker tries to squeeze advantages as much as he can (i.e he can wait until bob used his key 255th times and then ask for the challenge). Now there is only 1 bit left for the key, so the attacker still has a significant chance of guessing the correct key which is 50%. He doesn't improve his guessing chance by any percent since he always has 50% to guess $b*$ which is either 0 or 1 since the beginning (when Bob just started using the key).
+
+# Problem 3
+
+## Problem 1
+
+### Problem 1.a
+
+- This is \textbf{not a secure} MAC in a sense that:
+\begin{enumerate} 
+\item an attacker can ask the oracle the tag for $m = m_0 \concat m_1$ and receive the tag $y || z$ back in which $y = P_{k_0}(m_0)$ and $z = F_{k_1}(m_1)$
+\item He, then, divides the tag from the oracle into two blocks of n bits.
+\item Now, he swap his original message along with its tag. $m^{'} = m_1 \concat m_0$ and submit a new tag $tag^{'} = z \concat y$. This is a valid fogery since $m^{'} \neq m$ and $tag^{'}$ is a valid tag.
+\item The attacker will have a probability of 1 in winning this game, so the advantage is $1-\frac{1}{2^{2n}}$ which is non-negligible.
+\end{enumerate}
+
+### Problem 1.b
+
+- This is \textbf{a secure} MAC since the attacker can not compute $F_{k_0}(m)$ on his own without the key $k_0$. Same thing for $G(F_{k_1}(m))$, without the key he can't compute the result on his own. The two outputs of these function are pseudo random. Therefore, the attacker's advantage is negligible.
+
+## Problem 2
+
+\begin{enumerate}
+\item Mal can sit on the channel for a few days and observe the cipher pattern that being sent over (which is fixed). Then, Mal can change the recipient of the file or swap file to another doctor. In this case, Mal happens to be a \textbf{CTO} attacker when he can only have access to cipher text.
+\item Yes. The new approach will change my answer since we are now using EtA which is proven to secure agaisnt CCA attacker, and MAL is just a CTO attacker which is a weaker type of attack. Therefore, using EtA will be secure agaisnt Mal.However, Mal still has the ability to relay the message which will create an overhead for the hospital.
+\item This will impact security since the hospital will not know for sure who is the one that sent the message or if the message is tampered yet since Mal can still drop the ciphertexts were produced by the hashfunction. In addition, the message is \textbf{not long enough} and the Domains(doctor's name and files) are \textbf{too short} for the hash function work efficiently.
+\item If Alice used the counter, it's like timestamped her messages which can help agaisnt relay attacks. The hospital can verify that the message was sent recently and is not a delayed or replayed message from a previous communication session.
+\end{enumerate}
+
+# Problem 4
+\begin{enumerate}
+\item True
+\item False
+\item True
+\item False
+\item False
+\end{enumerate}

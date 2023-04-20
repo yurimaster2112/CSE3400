@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, CSE Dept.}
+
+\noindent
+{\bf Spring 2023}
+
+\noindent
+{\bf CSE 3400/CSE 5080: Introduction to Computer and Network Security \\(or Introduction to Cybersecurity)}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Assignment 4}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: 3/23/2023}
+
+\noindent
+{Submission deadline: 3/31/2023, 11:59 pm} \\\\
+
+\noindent{\bf Notes:} 
+\begin{itemize}
+\item Solutions {\bf must be typed} (using latex or any other text editor) and must be submitted as a pdf (not word or source latex files).
+\end{itemize}
+
+\noindent{\bf Problem 1 [40 points]\\}
+Let $h_1:\zo^{*} \to \zo^{n}$ be a CRHF and $h_2: \zo^{*} \to \zo^{n}$ be another function, based on that answer the following: 
+\begin{enumerate}
+    \item Construct a new hash function $h'$ as follows: $h'(m) = h_1(m_0) \oplus h_2(m_1)$ such that $m = m_0 \concat m_1$. If $h_2$ is a CRHF, will $h'$ be a CRHF? Justify your answer.
+    
+    \item Construct a new hash function $h''$ as follows: $h''(m) = m_0 \oplus h_1(m_1)$ such that $m = m_0 \concat m_1$ and $|m_0| = n$. Is $h''$ a CRHF? Justify your answer.
+    
+    \item Construct a new hash function $h'''$ as follows: $h'''(m) = h_2(h_1(m))$. If $h_2$ is a OWF, will $h'''$ be a OWF? Justify your answer.
+
+    \item Construct a new hash function $h''''$ as follows: $h''''(m) = h_1(m_0) \concat h_2(m_1)$ such that $m = m_0 \concat m_1$. If $h_2$ is an SPR function, will $h''''$ be a CRHF? Justify your answer.
+\end{enumerate}\\
+
+\noindent{\bf Note:} we know that unkeyed hash functions cannot be CRHF, all the functions we have above are keyed but for simplicity the keys are omitted. \\
+\noindent{\bf Note:} if the scheme is insecure (i.e., not a CRHF or not a OWF) then provide an attack against it and informally analyze its success probability. If the scheme is secure, just provide a convincing argument (formal security proofs are not required). \\
+
+\noindent{\bf Problem 2 [60 points]\\}
+This problem is about digest schemes.
+\begin{enumerate}
+\item {\bf(20 points)} Bob has a database composed of 16 files, each of which is of size 60 KB, and he constructed a Merkle tree over this database (i.e., the database files are the leaves of the tree). The files are named as $f_1, f_2, \dots, f_{16}$, and when constructing the tree these files are ordered from left to right, i.e., $f_1$ is the leftmost leave and so on. Bob sent the tree root to Alice. Based on that answer the following:
+\begin{enumerate}
+    \item How many levels does the resulting Merkle tree have?
+    
+    \item Assume Bob has used SHA384 for the hash function $h$ when constructing the tree. SHA384 has an output size of 48 bytes. What is the total size of the tree excluding the files?
+    
+    \item Bob wants to prove to Alice that file $f_{13}$ is a member of the tree. What is the proof of inclusion that Bob will send to Alice? what is the total size of that proof? How will Alice verify it?
+    
+    \item Will your answer change for part (c) if Bob wants to prove that file $f_4$ is a member of the tree? state all the changes.
+\end{enumerate}
+
+\item {\bf(20 points)} Answer the following about blockchains:
+\begin{enumerate}
+    \item Will mining be easier if the hash function used in proof of work is not a OWF? why?
+
+    \item Assume you want to use Bitcoin to buy a house (so you will issue a transaction $tx$ to buy the house). If you want the house to be bought when block number 100 is mined, what should you do? how can you later prove to someone that you bought the house when block 100 is mined? (here assume that any transaction you issue will be included in the next block to be mined.) 
+    
+    \item Will the mutability of blockchain break if the hash function we use to build it is only OWF? why?
+\end{enumerate}
+ 
+
+\item {\bf(20 points)} Answer the following about the Merkle-Damgard Digest Function and its Extend function (shown in slides 9 and 11, lecture 7).
+\begin{enumerate}
+    \item Bob uses the Merkle-Damgard Digest Function for timestamping (to prove to Alice that he knows some document a year ago by posting only its hash then reveal the document to the public later). Will this application work if Alice and Bob are using different IV values? why?
+
+    \item For the timestamping application, Mal claims that she knows Bob's document (while she does not) and one additional document she created by posting only one hash value covering both documents. How can Mal utilize the Merkle-Damgard extend function to achieve her goal and fool Alice that she knows both documents? 
+\end{enumerate}
+\end{enumerate}
+
+
+
+\end{document} 
